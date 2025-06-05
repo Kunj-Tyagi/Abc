@@ -10,6 +10,7 @@ connectDb();
 
 app.use(express.json());
 app.use(limiter);
+app.use("/api/users",require("./routes/userRoutes.js"));
 app.use("/api/v1/chapters", require("./routes/chaptersRoutes"));
 app.use(errorHandler);
 

@@ -2,12 +2,13 @@ const express=require("express");
 const router=express.Router();
 const {getChapters,uploadChapters,getChapter} =require("../controllers/chapterController");
 const upload = require('../middleware/upload');
+const { protect, adminOnly } = require('../middleware/Auth');
 
 router.route("/")
     .get(getChapters);
 
 
-router.post('/', upload.single('file'), uploadChapters);
+router.post('/', protect, adminOnly, upload.single('file'), uploadChapters);
 
 router.route("/:id")
     .get(getChapter);   
