@@ -46,7 +46,7 @@ const getChapters = asyncHandler(async (req, res) => {
 
     if (cachedData) {
       // Cache hit - parse and send response
-       console.log("Cache hit: Data served from Redis");
+      //  console.log("Cache hit: Data served from Redis");
       return res.status(200).json(JSON.parse(cachedData));
     }
     
@@ -54,7 +54,7 @@ const getChapters = asyncHandler(async (req, res) => {
 
 
      // Cache miss - query DB
-     console.log("Cache miss: Data served from MongoDB");
+    //  console.log("Cache miss: Data served from MongoDB");
     // Get total count of chapters matching the filter (for pagination)
     const totalChapters = await Chapter.countDocuments(filter);
 
@@ -79,7 +79,7 @@ const getChapters = asyncHandler(async (req, res) => {
       chapters,
     };
 
-    // Store response in Redis cache for 1 hour (3600 seconds)
+    // Store response in Redis cache for 1 hour
     await redisClient.setEx(cacheKey, 3600, JSON.stringify(response));
 
     res.status(200).json(response);
@@ -90,30 +90,6 @@ const getChapters = asyncHandler(async (req, res) => {
 
 
 });
-
-
-
-
-
-// const getChapters = asyncHandler(async (req, res) => {
-
-//     const chapters = await Chapter.find();
-//     res.status(200).json({
-//       success: true,
-//       count: chapters.length,
-//       data: chapters
-//     });
-
-//     // // Simulating fetching chapters from a database
-//     // const chapters = [
-//     //     { id: 1, title: "Chapter 1", content: "Content of Chapter 1" },
-//     //     { id: 2, title: "Chapter 2", content: "Content of Chapter 2" }
-//     // ];
-    
-//     // res.status(200).json(chapters);
-// });
-
-
 
 // @desc Get a single chapter (returns a specific chapter)
 // @route GET /api/v1/chapters/:id
@@ -151,21 +127,6 @@ const getChapter = asyncHandler(async (req, res) => {
       success: true,
       data: chapter
     });
-
-
-
-    // // Simulating fetching a single chapter by ID
-    // const chapterId = req.params.id;
-    
-
-    // const chapter = { id: chapterId, title: `Chapter ${chapterId}`, content: `Content of Chapter ${chapterId}` };
-    
-    // if (!chapter) {
-    //     res.status(404).json({ message: "Chapter not found" });
-    //     return;
-    // }
-    
-    // res.status(200).json(chapter);
 });
 
 
@@ -235,46 +196,6 @@ const uploadChapters = asyncHandler(async (req, res) => {
 
 
 });
-
-
-
-
-
-
-
-
-// const uploadChapters = asyncHandler(async (req, res) => {
-//     const data = req.body;
-
-//     // Check if it's a single object or an array of objects
-//     if (!data || (Array.isArray(data) && data.length === 0)) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "No data provided"
-//       });
-//     }
-
-//     const chapters = await Chapter.insertMany(Array.isArray(data) ? data : [data]);
-
-//     res.status(201).json({
-//       success: true,
-//       message: "Chapters uploaded successfully",
-//       data: chapters
-//     });
-
-
-
-//     // Simulating chapter upload
-//     // const newChapter = {
-//     //     id: Date.now(),
-//     //     title: req.body.title,
-//     //     content: req.body.content
-//     // };
-    
-//     // // Here you would typically save the new chapter to the database
-//     // res.status(201).json(newChapter);
-// });
-
 
 module.exports = {
     getChapters,
