@@ -87,7 +87,3 @@ Server will run on `http://localhost:8080` by default.
 ## Environment Variables
 
 See [backend/.env](backend/.env) for required variables.
-
-## License
-
-MIT
