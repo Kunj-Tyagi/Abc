@@ -1,89 +1,142 @@
-# MathonGo Backend
+# Chapter Performance Dashboard Backend API (MathonGo)
 
-This is the backend API for the MathonGo assignment. It provides user authentication, chapter management, and caching with Redis.
+A RESTful API backend for a Chapter Performance Dashboard, built as a sample task for MathonGo. This project demonstrates API design, data filtering, caching, rate-limiting, and performance optimization using Node.js, Express.js, MongoDB, and Redis.
 
 ## Features
 
-- User signup & login with JWT authentication
-- Admin-only chapter upload via JSON file
-- Chapter listing with filtering, pagination, and Redis caching
-- Rate limiting using Redis
-- MongoDB for data storage
+- *RESTful Endpoints* for managing chapter data
+- *Advanced filtering* and pagination for listing chapters
+- *Upload chapters via JSON* (admin only), with error handling and partial success reporting
+- *Redis caching* for fast retrieval of chapter lists
+- *Cache invalidation* on new chapter uploads
+- *Rate limiting* per IP (30 requests/min) using Redis
+- *Modular, clean, and well-documented code*
 
-## Depolyment Link (EC2)
-link is heree - `http://3.7.185.123.nip.io/`
+---
 
 
-## Project Structure
+## Deployment Link (EC2)
 
-```
-backend/
-  config/           # Database connection
-  controllers/      # Route controllers
-  middleware/       # Auth, error handling, rate limiting, file upload
-  models/           # Mongoose schemas
-  routes/           # Express route definitions
-  utils/            # Constants
-  redisClient.js    # Redis client setup
-  index.js          # Entry point
-  .env              # Environment variables
-```
+- The API is deployed at: http://3.7.185.123.nip.io/
+  
 
-## Getting Started
+---
 
-### Prerequisites
+## Tech Stack
 
-- Node.js (v16+ recommended)
-- MongoDB database
-- Redis instance (Upstash or local)
+- *Node.js*
+- *Express.js*
+- *MongoDB* + Mongoose
+- *Redis* (for caching and rate-limiting)
+- *Deployed on:* EC2 (AWS)  
+  http://3.7.185.123.nip.io/
 
-### Installation
-
-1. Clone the repository and navigate to the backend folder:
-    ```sh
-    git clone <repo-url>
-    cd backend
-    ```
-
-2. Install dependencies:
-    ```sh
-    npm install
-    ```
-
-3. Create a `.env` file (see `.env` for example values):
-    ```
-    PORT=8080
-    MONGODB=<your-mongodb-uri>
-    REDIS_URL=<your-redis-url>
-    JWT_SECRET=<your-jwt-secret>
-    ```
-
-### Running the Server
-
-- For development (with auto-reload):
-    ```sh
-    npm run dev
-    ```
-- For production:
-    ```sh
-    npm start
-    ```
-
-Server will run on `http://localhost:8080` by default.
+---
 
 ## API Endpoints
 
-### Users
+### 1. Get All Chapters
 
-- `POST /api/users/signup` — Register a new user
-- `POST /api/users/login` — Login and receive JWT
 
-### Chapters
+GET /api/v1/chapters
 
-- `GET /api/v1/chapters` — List chapters (supports filters and pagination)
-- `GET /api/v1/chapters/:id` — Get chapter by ID
-- `POST /api/v1/chapters` — Upload chapters (admin only, JSON file upload)
+- *Filters:* class, unit, status, weakChapters, subject
+- *Pagination:* page & limit query params
+- *Response:* Returns filtered, paginated list and the total number of chapters
 
-## Environment Variables
 
-See [backend/.env](backend/.env) for required variables.
+
+### 2. Get Chapter by ID
+
+
+GET /api/v1/chapters/:id
+
+- Returns the details of a specific chapter by its ID
+
+
+
+### 3. Upload Chapters (Admin Only)
+
+
+POST /api/v1/chapters
+
+- *Upload:* Accepts a JSON file containing an array of chapters
+- *Validation:* Only valid chapters are uploaded; invalid ones are reported in response
+- *Access:* Restricted to admin users
+
+
+
+### 4. Register User/Admin
+
+
+POST /api/users/signup
+
+- Register a new user/admin
+
+
+
+### 5. Login User/Admin
+
+
+POST /api/users/login
+
+- Login using this route
+
+---
+
+## Caching (Redis)
+
+- Results from GET /api/v1/chapters are cached for 1 hour
+- Cache is invalidated automatically when new chapters are added
+
+---
+
+## Rate Limiting
+
+- Each IP is limited to 30 requests per minute (handled via Redis)
+
+---
+
+## How to Run Locally
+
+1. *Clone the repository*
+   bash
+   git clone https://github.com/Omdeep-Tyagi/Assignment.git
+   cd Assignment
+   
+
+2. *Install dependencies*
+   bash
+   npm install
+   
+
+3. *Setup environment variables*
+
+   Create a .env file in the root directory:
+
+   
+   PORT=8080
+   MONGODB=<your-mongodb-uri>
+   REDIS_URL=<your-redis-url>
+   JWT_SECRET=<your-jwt-secret>
+   
+
+4. *Start the server*
+   bash
+   npm run dev
+   
+
+---
+
+
+## Postman Collection
+
+- https://documenter.getpostman.com/view/37282369/2sB2x2Labq
+
+---
+
+
+
+## Author
+
+- [Kunj Tyagi](https://github.com/Kunj-Tyagi)
