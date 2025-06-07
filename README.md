@@ -101,7 +101,7 @@ POST /api/users/login
 
 1. *Clone the repository*
    bash
-   git clone https://github.com/Omdeep-Tyagi/Assignment.git
+   git clone https://github.com/Kunj-Tyagi/MathonGo-Assignment.git
    cd Assignment
    
 
